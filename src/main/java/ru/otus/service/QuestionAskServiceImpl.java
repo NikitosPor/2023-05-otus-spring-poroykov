@@ -2,43 +2,45 @@ package ru.otus.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.otus.dao.LinesFromCsvFileDao;
-import ru.otus.domain.QuestionWithAnswers;
+import ru.otus.dao.QuestionDao;
+import ru.otus.domain.Answer;
+import ru.otus.domain.Question;
 import ru.otus.helpers.IOStreamHelper;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class QuestionAskServiceImpl implements QuestionAskService {
-    private final LinesFromCsvFileDao linesFromCsvFileDao;
+    private final QuestionDao questionDao;
+
     private final IOStreamHelper ioStreamHelper;
 
     @Autowired
-    public QuestionAskServiceImpl(LinesFromCsvFileDao linesFromCsvFileDao, IOStreamHelper ioStreamHelper) {
-        this.linesFromCsvFileDao = linesFromCsvFileDao;
+    public QuestionAskServiceImpl(QuestionDao questionDao, IOStreamHelper ioStreamHelper) {
+        this.questionDao = questionDao;
         this.ioStreamHelper = ioStreamHelper;
     }
 
-    public int askAllQuestionsAndReturnCounter() throws IOException {
+    public int askAllQuestionsAndReturnCounter() {
         int counterOfRightAnswers = 0;
-        List<QuestionWithAnswers> listOfQuestionsWithAnswers = linesFromCsvFileDao.getAllQuestionsAndAnswers();
+        List<Question> listOfQuestions = questionDao.getAllQuestionsAndAnswers();
 
-        for (QuestionWithAnswers stringLine : listOfQuestionsWithAnswers) {
-            String answer;
-            String rightAnswer = stringLine.getRightAnswer();
-            ioStreamHelper.outputString(stringLine.getQuestion() + " "
-                    + stringLine.getAnswerX(0) + " "
-                    + stringLine.getAnswerX(1) + " "
-                    + stringLine.getAnswerX(2)
-            );
+        for (Question question : listOfQuestions) {
+            List<Answer> listOfAnswers = question.getListOfAnswers();
+            StringBuilder string = new StringBuilder();
 
+            string.append(question.getQuestion()).append(" ");
+            listOfAnswers.forEach(answer -> string.append(answer.getAnswer()).append(" "));
+            ioStreamHelper.outputString(string.toString());
             ioStreamHelper.outputString("Choice the right answer:");
-            answer = ioStreamHelper.parseString();
+            String enteredAnswer = ioStreamHelper.readString().toLowerCase();
 
-            if (Objects.equals(answer, rightAnswer)) {
-                counterOfRightAnswers++;
+            for (Answer answer : listOfAnswers) {
+                String firstSymbol = answer.getAnswer().substring(0, 1);
+                boolean isCorrect = answer.isCorrect();
+                if (enteredAnswer.equals(firstSymbol) && isCorrect) {
+                    counterOfRightAnswers++;
+                }
             }
         }
 

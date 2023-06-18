@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class IOStreamHelperImpl implements IOStreamHelper {
 
     private final PrintStream output = System.out;
+
     private final Scanner input = new Scanner(System.in);
 
     @Override
@@ -17,7 +18,7 @@ public class IOStreamHelperImpl implements IOStreamHelper {
     }
 
     @Override
-    public String parseString() {
+    public String readString() {
         return input.nextLine();
     }
 }

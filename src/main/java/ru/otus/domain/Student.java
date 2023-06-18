@@ -2,6 +2,7 @@ package ru.otus.domain;
 
 public class Student {
     private final String name;
+
     private final String sureName;
 
     public Student(String name, String sureName) {

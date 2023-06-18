@@ -5,13 +5,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 import ru.otus.service.AppRunService;
 
-import java.io.IOException;
-
 @PropertySource("classpath:application.properties")
 @ComponentScan
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         AppRunService app = context.getBean(AppRunService.class);
         app.run();
