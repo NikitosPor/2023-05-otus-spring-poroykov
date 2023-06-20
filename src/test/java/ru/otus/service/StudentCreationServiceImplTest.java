@@ -15,6 +15,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Class StudentCreationServiceImpl must be able to:")
 class StudentCreationServiceImplTest {
+
+    private static final String STUDENT_name = "Ivan";
+
+    private static final String STUDENT_surename = "Drago";
+
     private static final String STUDENT_FULLNAME = "Ivan Drago";
     @Mock
     private IOStreamHelper ioStreamHelper;
@@ -25,7 +30,7 @@ class StudentCreationServiceImplTest {
     @DisplayName("Create a student")
     @Test
     void getAllQuestionsAndAnswersTest() {
-        when(ioStreamHelper.readString()).thenReturn(STUDENT_FULLNAME);
+        when(ioStreamHelper.readString()).thenReturn(STUDENT_name, STUDENT_surename);
         var testStudent = studentCreationService.askNameAndCreateStudent();
         assertEquals(STUDENT_FULLNAME, testStudent.getFullName());
     }

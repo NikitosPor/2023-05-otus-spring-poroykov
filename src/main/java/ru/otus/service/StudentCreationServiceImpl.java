@@ -13,19 +13,12 @@ public class StudentCreationServiceImpl implements StudentCreationService {
     }
 
     public Student askNameAndCreateStudent() {
-        String name = null;
-        String sureName = null;
-        while (name == null) {
-            ioStreamHelper.outputString("Please enter your name and surename between a space and press Enter:");
-            try {
-                String inputLine = ioStreamHelper.readString();
-                name = inputLine.substring(0, inputLine.indexOf(" "));
-                sureName = inputLine.substring(inputLine.indexOf(" ") + 1);
-            } catch (Exception e) {
-                ioStreamHelper.outputString("Seems you entered wrong name and surename.\n" +
-                        "Be sure that you placed space between name and surename");
-            }
-        }
+
+        ioStreamHelper.outputString("Please enter your name and press Enter:");
+        String name = ioStreamHelper.readString();
+        ioStreamHelper.outputString("Please enter your surename and press Enter:");
+        String sureName = ioStreamHelper.readString();
+
         return new Student(name, sureName);
     }
 }
