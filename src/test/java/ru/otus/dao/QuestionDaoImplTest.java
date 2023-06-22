@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +28,8 @@ class QuestionDaoImplTest {
 
     @DisplayName("Extract list of questions")
     @Test
-    void getAllQuestionsAndAnswersTest() throws IOException {
-        var testList = questionDao.getAllQuestionsAndAnswers();
+    void getAllQuestionsAndAnswersTest() {
+        var testList = questionDao.getAllQuestions();
         for (int i = 0; i < testList.size(); i++) {
             int finalI = i;
             String validatedQuestion = testList.get(finalI).getQuestion();

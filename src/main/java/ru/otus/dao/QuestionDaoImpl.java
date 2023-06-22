@@ -6,6 +6,7 @@ import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,6 @@ import java.util.Scanner;
 
 @Component
 public class QuestionDaoImpl implements QuestionDao {
-    private final List<Question> listOfQuestionsWithAnswers = new ArrayList<>();
 
     private final String filePathDest;
 
@@ -23,10 +23,10 @@ public class QuestionDaoImpl implements QuestionDao {
         this.filePathDest = filePath;
     }
 
-    public List<Question> getAllQuestionsAndAnswers() {
+    public List<Question> getAllQuestions() {
+        List<Question> listOfQuestionsWithAnswers = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream(filePathDest))))
-        ) {
+                new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream(filePathDest))))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 List<Answer> lstOfAnswrs = new ArrayList<>();
@@ -41,11 +41,11 @@ public class QuestionDaoImpl implements QuestionDao {
                     lstOfAnswrs.add(new Answer(listOfStrngs.get(i),
                             ((listOfStrngs.get(i)).substring(0, 1).equals(listOfStrngs.get(4)))));
                 }
-                this.listOfQuestionsWithAnswers.add(new Question(listOfStrngs.get(0), lstOfAnswrs));
+                listOfQuestionsWithAnswers.add(new Question(listOfStrngs.get(0), lstOfAnswrs));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error resource file reading!");
         }
-        return this.listOfQuestionsWithAnswers;
+        return listOfQuestionsWithAnswers;
     }
 }

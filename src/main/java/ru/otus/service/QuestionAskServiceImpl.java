@@ -21,27 +21,40 @@ public class QuestionAskServiceImpl implements QuestionAskService {
         this.ioStreamHelper = ioStreamHelper;
     }
 
+    private List<Answer> getListOfAnswers(Question question) {
+        return question.getListOfAnswers();
+    }
+
+    private void showQuestions(Question question) {
+        List<Answer> listOfAnswers = getListOfAnswers(question);
+        StringBuilder string = new StringBuilder();
+        string.append(question.getQuestion()).append(" ");
+        listOfAnswers.forEach(answer -> string.append(answer.getAnswer()).append(" "));
+        ioStreamHelper.outputString(string.toString());
+        ioStreamHelper.outputString("Choice the right answer:");
+    }
+
+    private int getCountOfRightAnswers(List<Answer> listOfAnswers, String enteredAnswer) {
+        int counterOfRightAnswers = 0;
+        for (Answer answer : listOfAnswers) {
+            String firstSymbol = answer.getAnswer().substring(0, 1);
+            boolean isCorrect = answer.isCorrect();
+            if (enteredAnswer.equals(firstSymbol) && isCorrect) {
+                counterOfRightAnswers++;
+            }
+        }
+        return counterOfRightAnswers;
+    }
+
+
     public int askAllQuestionsAndReturnCounter() {
         int counterOfRightAnswers = 0;
-        List<Question> listOfQuestions = questionDao.getAllQuestionsAndAnswers();
+        List<Question> listOfQuestions = questionDao.getAllQuestions();
 
         for (Question question : listOfQuestions) {
-            List<Answer> listOfAnswers = question.getListOfAnswers();
-            StringBuilder string = new StringBuilder();
-
-            string.append(question.getQuestion()).append(" ");
-            listOfAnswers.forEach(answer -> string.append(answer.getAnswer()).append(" "));
-            ioStreamHelper.outputString(string.toString());
-            ioStreamHelper.outputString("Choice the right answer:");
+            showQuestions(question);
             String enteredAnswer = ioStreamHelper.readString().toLowerCase();
-
-            for (Answer answer : listOfAnswers) {
-                String firstSymbol = answer.getAnswer().substring(0, 1);
-                boolean isCorrect = answer.isCorrect();
-                if (enteredAnswer.equals(firstSymbol) && isCorrect) {
-                    counterOfRightAnswers++;
-                }
-            }
+            counterOfRightAnswers = getCountOfRightAnswers(getListOfAnswers(question), enteredAnswer);
         }
 
         return counterOfRightAnswers;

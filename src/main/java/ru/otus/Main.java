@@ -8,7 +8,7 @@ import ru.otus.service.AppRunService;
 @PropertySource("classpath:application.properties")
 @ComponentScan
 public class Main {
-
+///...
     public static void main(String[] args) {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         AppRunService app = context.getBean(AppRunService.class);
