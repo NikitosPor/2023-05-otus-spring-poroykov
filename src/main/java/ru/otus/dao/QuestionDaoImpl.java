@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
+import ru.otus.helpers.ResourceFileReadingException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 listOfQuestionsWithAnswers.add(new Question(listOfStrngs.get(0), lstOfAnswrs));
             }
         } catch (IOException e) {
-            System.out.println("Error resource file reading!");
+            throw new ResourceFileReadingException();
         }
         return listOfQuestionsWithAnswers;
     }

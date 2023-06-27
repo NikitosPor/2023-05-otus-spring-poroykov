@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 @Component
-public class IOStreamHelperImpl implements IOStreamHelper {
+public class IOServiceImpl implements IOService {
 
     private final PrintStream output = System.out;
 

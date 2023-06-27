@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.helpers.IOStreamHelper;
+import ru.otus.helpers.IOService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -22,7 +22,7 @@ class StudentCreationServiceImplTest {
 
     private static final String STUDENT_FULLNAME = "Ivan Drago";
     @Mock
-    private IOStreamHelper ioStreamHelper;
+    private IOService ioService;
 
     @InjectMocks
     private StudentCreationServiceImpl studentCreationService;
@@ -30,7 +30,7 @@ class StudentCreationServiceImplTest {
     @DisplayName("Create a student")
     @Test
     void getAllQuestionsAndAnswersTest() {
-        when(ioStreamHelper.readString()).thenReturn(STUDENT_name, STUDENT_surename);
+        when(ioService.readString()).thenReturn(STUDENT_name, STUDENT_surename);
         var testStudent = studentCreationService.askNameAndCreateStudent();
         assertEquals(STUDENT_FULLNAME, testStudent.getFullName());
     }

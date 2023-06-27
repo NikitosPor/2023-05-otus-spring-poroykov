@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.dao.QuestionDao;
 import ru.otus.domain.Answer;
 import ru.otus.domain.Question;
-import ru.otus.helpers.IOStreamHelper;
+import ru.otus.helpers.IOService;
 
 import java.util.List;
 
@@ -13,25 +13,39 @@ import java.util.List;
 public class QuestionAskServiceImpl implements QuestionAskService {
     private final QuestionDao questionDao;
 
-    private final IOStreamHelper ioStreamHelper;
+    private final IOService ioService;
 
     @Autowired
-    public QuestionAskServiceImpl(QuestionDao questionDao, IOStreamHelper ioStreamHelper) {
+    public QuestionAskServiceImpl(QuestionDao questionDao, IOService ioService) {
         this.questionDao = questionDao;
-        this.ioStreamHelper = ioStreamHelper;
+        this.ioService = ioService;
+    }
+
+
+    public int askAllQuestionsAndReturnCounter() {
+        int counterOfRightAnswers = 0;
+        List<Question> listOfQuestions = questionDao.getAllQuestions();
+
+        for (Question question : listOfQuestions) {
+            showQuestion(question);
+            String enteredAnswer = ioService.readString().toLowerCase();
+            counterOfRightAnswers = getCountOfRightAnswers(getListOfAnswers(question), enteredAnswer);
+        }
+
+        return counterOfRightAnswers;
     }
 
     private List<Answer> getListOfAnswers(Question question) {
         return question.getListOfAnswers();
     }
 
-    private void showQuestions(Question question) {
+    private void showQuestion(Question question) {
         List<Answer> listOfAnswers = getListOfAnswers(question);
         StringBuilder string = new StringBuilder();
         string.append(question.getQuestion()).append(" ");
         listOfAnswers.forEach(answer -> string.append(answer.getAnswer()).append(" "));
-        ioStreamHelper.outputString(string.toString());
-        ioStreamHelper.outputString("Choice the right answer:");
+        ioService.outputString(string.toString());
+        ioService.outputString("Choice the right answer:");
     }
 
     private int getCountOfRightAnswers(List<Answer> listOfAnswers, String enteredAnswer) {
@@ -46,17 +60,4 @@ public class QuestionAskServiceImpl implements QuestionAskService {
         return counterOfRightAnswers;
     }
 
-
-    public int askAllQuestionsAndReturnCounter() {
-        int counterOfRightAnswers = 0;
-        List<Question> listOfQuestions = questionDao.getAllQuestions();
-
-        for (Question question : listOfQuestions) {
-            showQuestions(question);
-            String enteredAnswer = ioStreamHelper.readString().toLowerCase();
-            counterOfRightAnswers = getCountOfRightAnswers(getListOfAnswers(question), enteredAnswer);
-        }
-
-        return counterOfRightAnswers;
-    }
 }

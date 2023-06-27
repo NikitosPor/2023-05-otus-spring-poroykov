@@ -1,5 +1,6 @@
 package ru.otus.dao;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,5 +47,10 @@ class QuestionDaoImplTest {
                     () -> assertEquals(LIST_OF_QUESTIONS.get(finalI).getListOfAnswers().get(2).isCorrect(), validatedListOfAnswers.get(2).isCorrect())
             );
         }
+    }
+
+    @AfterEach
+    void tearDown() {
+        LIST_OF_QUESTIONS.clear();
     }
 }

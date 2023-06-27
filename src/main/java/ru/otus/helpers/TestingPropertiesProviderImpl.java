@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 
 @PropertySource("classpath:application.properties")
 @Component
-public class MinRightQuestionsImpl implements MinRightQuestions {
+public class TestingPropertiesProviderImpl implements TestingPropertiesProvider {
     private final int minRightQuestionsCount;
 
-    public MinRightQuestionsImpl(@Value("${right.answers}") int count) {
+    public TestingPropertiesProviderImpl(@Value("${right.answers}") int count) {
         this.minRightQuestionsCount = count;
     }
 
