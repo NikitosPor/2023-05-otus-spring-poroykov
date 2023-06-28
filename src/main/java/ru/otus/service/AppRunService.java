@@ -3,8 +3,10 @@ package ru.otus.service;
 import org.springframework.stereotype.Service;
 import ru.otus.domain.TestResult;
 import ru.otus.helpers.IOService;
-import ru.otus.helpers.ResourceFileReadingException;
+import ru.otus.exceptions.QuestionsReadingException;
 import ru.otus.helpers.TestingPropertiesProvider;
+
+import java.io.IOException;
 
 @Service
 public class AppRunService {
@@ -36,8 +38,12 @@ public class AppRunService {
             testResult.setStudent(studentCreationService.askNameAndCreateStudent());
             testResult.setRightAnswerCounter(questionAskService.askAllQuestionsAndReturnCounter());
             resultsOutputService.printResults(testResult, minRightAnswersLimit);
-        } catch (ResourceFileReadingException e) {
-            ioService.outputString("Error resource file reading!");
+        } catch (QuestionsReadingException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof IOException ioException) {
+                ioService.outputString("Error resource file reading!");
+                ioException.printStackTrace(); // тут как я понимаю логирование вместо этого надо
+            }
         }
     }
 }
